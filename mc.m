@@ -31,3 +31,31 @@ f_survival = N0/N; % Calculate survival curve for non-crystalline droplets for a
 
 bins = 0.5*[1 - 0.997 1 - 0.95 1 - 0.68 1 1 + 0.68 1 + 0.95 1 + 0.997];
 envelopes = quantile(f_survival, bins, 1); % Bin experiments into 68/95/99.7% quantiles
+
+%% Plot
+f = figure;
+plot(time, P0t,'r-', 'DisplayName', 'P0t'); 
+hold on
+% plot(time, f_survival, 'r.'); % recommend only execute for experiments <= 10^4
+
+% 3σ envelope
+fill([time, fliplr(time)], ...
+     [envelopes(1,:), fliplr(envelopes(7,:))], ...
+     [0.8 0.8 0.8], 'EdgeColor', 'none', 'DisplayName', '3σ');
+
+% 2σ envelope
+fill([time, fliplr(time)], ...
+     [envelopes(2,:), fliplr(envelopes(6,:))], ...
+     [0.6 0.6 0.6], 'EdgeColor', 'none', 'DisplayName', '2σ');
+
+%  1σ envelope
+fill([time, fliplr(time)], ...
+     [envelopes(3,:), fliplr(envelopes(5,:))], ...
+     [0.4 0.4 0.4], 'EdgeColor', 'none', 'DisplayName', '1σ');
+
+xlim([0 52]); ylim([0 1]);
+box on
+xlabel('time (hours)'); ylabel('N1/N0');
+legend;
+hold off;
+

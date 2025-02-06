@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 from joblib import Parallel, delayed
 
 # Simulation settings
-experiments = int(1e5)
+experiments = int(1e3)
 duration = 100
 attempts = duration
 time = np.linspace(0, duration, attempts + 1)
@@ -41,10 +41,19 @@ envelopes = np.quantile(f_survival, bins, axis=0)
 plt.figure(figsize=(8,6))
 plt.plot(time, P0t, 'k--', label='P0t')
 
-# Shaded regions
-plt.fill_between(time, envelopes[0], envelopes[6], color=(0.6, 0.6, 0.6, 0.4), label='3σ')
-plt.fill_between(time, envelopes[1], envelopes[5], color=(0.6, 0.6, 0.6, 0.4),  label='2σ')
-plt.fill_between(time, envelopes[2], envelopes[4], color=(0.6, 0.6, 0.6, 0.4), label='1σ')
+#for i in range(0, 5):
+#    plt.plot(time, f_survival[i], '.', color=(i/10, i/10, i/10, 0.4), label='Expi')
+
+colors = ['r', 'g', 'b']
+
+ExpPlot = 5; # Number of individual survival curves to plot
+for i, y in enumerate(f_survival[:ExpPlot]):
+    plt.plot(time, y, '.', c=(np.random.rand(), np.random.rand()/10, np.random.rand()))
+
+# Plot shaded envelopes for quantiles based on 1-3 standard deviations from mean
+plt.fill_between(time, envelopes[0], envelopes[6], color=(0.6, 0.6, 0.6, 1), label='3σ')
+plt.fill_between(time, envelopes[1], envelopes[5], color=(0.7, 0.7, 0.7, 1),  label='2σ')
+plt.fill_between(time, envelopes[2], envelopes[4], color=(0.8, 0.8, 0.8, 1), label='1σ')
 
 plt.xlabel('Time (hours)')
 plt.ylabel('Survival (no crystal)')

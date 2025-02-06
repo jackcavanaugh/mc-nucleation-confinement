@@ -3,6 +3,7 @@ experiments = 10^5; % total number of individual MC experiments
 duration = 100; % total time of experiments in hours
 attempts = duration; % time resolution of crystallization events
 time = 0:duration/attempts:duration; % hours
+ExpPlot = 5; % Number of individual survival curves to plot
 N = 100; % Initial number of droplets
 d = 100*10^-4; % diameter of individual droplet in cm
 V = 4/3*pi*(d/2)^3; % droplet volume in cm^3
@@ -36,8 +37,9 @@ envelopes = quantile(f_survival, bins, 1); % Bin experiments into 68/95/99.7% qu
 f = figure;
 plot(time, P0t,'r-', 'DisplayName', 'P0t'); 
 hold on
-% plot(time, f_survival, 'r.'); % recommend only execute for experiments <= 10^4
+plot(time, f_survival(1:ExpPlot,:)', 'r.');
 
+%% # Plot shaded envelopes for quantiles based on 1-3 standard deviations from mean
 % 3σ envelope
 fill([time, fliplr(time)], ...
      [envelopes(1,:), fliplr(envelopes(7,:))], ...
